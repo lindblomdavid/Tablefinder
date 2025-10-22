@@ -11,12 +11,12 @@ with open("requirements.txt", "r", encoding="utf-8") as fh:
 setup(
     name="table-finder",
     version="1.0.0",
-    author="Your Name",
-    author_email="your.email@example.com",
+    author="David Lindblom",
+    author_email="",
     description="Search for values across all tables and columns in SQL Server databases",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/yourusername/table-finder",
+    url="https://github.com/lindblomdavid/Tablefinder",
     packages=find_packages(),
     classifiers=[
         "Development Status :: 4 - Beta",
