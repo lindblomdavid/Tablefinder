@@ -1,5 +1,9 @@
 # Table Finder
 
+[![Python Version](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![GitHub](https://img.shields.io/badge/GitHub-lindblomdavid%2FTablefinder-blue?logo=github)](https://github.com/lindblomdavid/Tablefinder)
+
 A Python package to search for specific values across all tables and columns in a SQL Server database. Perfect for undocumented databases with hundreds or thousands of tables.
 
 ## Key Features
