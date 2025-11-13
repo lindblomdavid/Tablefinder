@@ -83,11 +83,18 @@ def filter_and_reorder_tables(
         'skipped_tables': []
     }
 
-    # Parse skip tables list
+    # Parse skip tables list (supports wildcards like konv_*)
     skip_tables_list = []
+    skip_patterns = []
     if skip_tables:
-        skip_tables_list = [t.strip().lower() for t in skip_tables.split(',')]
-        stats['skipped_tables'] = skip_tables_list
+        for t in skip_tables.split(','):
+            t = t.strip().lower()
+            if '*' in t:
+                # It's a pattern
+                skip_patterns.append(t.replace('*', ''))
+            else:
+                skip_tables_list.append(t)
+        stats['skipped_tables'] = skip_tables.split(',')
 
     # Reorder tables based on start-from parameter
     if start_from:
@@ -108,9 +115,23 @@ def filter_and_reorder_tables(
             stats['started_from'] = start_from
 
     # Filter out skipped tables
-    if skip_tables_list:
+    if skip_tables_list or skip_patterns:
         original_count = len(tables)
-        tables = [t for t in tables if t.split('.')[-1].lower() not in skip_tables_list]
+        filtered_tables = []
+        for t in tables:
+            table_name_only = t.split('.')[-1].lower()
+            # Check exact match
+            if table_name_only in skip_tables_list:
+                continue
+            # Check pattern match
+            skip_table = False
+            for pattern in skip_patterns:
+                if table_name_only.startswith(pattern):
+                    skip_table = True
+                    break
+            if not skip_table:
+                filtered_tables.append(t)
+        tables = filtered_tables
         stats['skipped_count'] = original_count - len(tables)
 
     stats['final_count'] = len(tables)
