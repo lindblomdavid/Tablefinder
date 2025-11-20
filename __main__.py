@@ -34,6 +34,7 @@ Examples:
     parser.add_argument('--table-pattern', help='SQL LIKE pattern to filter tables (e.g., "ny%%")')
     parser.add_argument('--start-from', help='Start searching from this table name, then continue with all others')
     parser.add_argument('--skip-tables', help='Comma-separated list of table names to skip (e.g., "cmlog,temp")')
+    parser.add_argument('--fast', action='store_true', help='Fast mode - skips large/slow tables like cmlog, dofil')
     parser.add_argument('--stop-on-first', action='store_true', help='Stop searching after finding the first match')
     parser.add_argument('--output', help='Save results to JSON file')
 
@@ -51,6 +52,15 @@ Examples:
             return 1
         print()
 
+    # Handle fast mode
+    if args.fast:
+        # Add large/slow tables to skip list (supports wildcards)
+        fast_skip_tables = ['cmlog', 'dofil', 'konv_*', 'aoupp']
+        if args.skip_tables:
+            args.skip_tables = args.skip_tables + ',' + ','.join(fast_skip_tables)
+        else:
+            args.skip_tables = ','.join(fast_skip_tables)
+
     # Print search configuration
     print(f"\n{'='*80}")
     print(f"Database Table Value Finder")
@@ -58,6 +68,8 @@ Examples:
     print(f"Search value: '{args.search_value}'")
     print(f"Exact match: {args.exact}")
     print(f"Case sensitive: {args.case_sensitive}")
+    if args.fast:
+        print(f"Fast mode: Enabled")
     if args.table_pattern:
         print(f"Table pattern: {args.table_pattern}")
     if args.start_from:
